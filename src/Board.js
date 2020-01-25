@@ -32,7 +32,7 @@ class Board extends Component {
   static defaultProps = {
     nrows: 5,
     ncols: 5,
-    chanceLightStartsOn: 0.25
+    chanceLightStartsOn: 0.025
   };
   constructor(props) {
     super(props);
@@ -92,9 +92,16 @@ class Board extends Component {
 
   render() {
     // if the game is won, just show a winning msg & render nothing else
-    if(this.state.hasWon) {
-      return <h1>You Won!...</h1>
-    }
+    // if (this.state.hasWon) {
+    //   return (
+    //     <div className="Board-title">
+    //       <div className="winner">
+    //         <span className="neon-orange">YOU</span>
+    //         <span className="neon-blue">WIN!</span>
+    //       </div>
+    //     </div>
+    //   );
+    // }
     // TODO
 
     // make table board
@@ -102,25 +109,37 @@ class Board extends Component {
     for (let y = 0; y < this.props.nrows; y++) {
       const row = [];
       for (let x = 0; x < this.props.ncols; x++) {
-        let coord = `${y}-${x}`
-        row.push(<Cell
-        key={coord}
-        isLit={this.state.board[y][x]}
-        flipCellsAroundMe={() => this.flipCellsAround(coord)}
-        value={coord}
-        />);
+        let coord = `${y}-${x}`;
+        row.push(
+          <Cell
+            key={coord}
+            isLit={this.state.board[y][x]}
+            flipCellsAroundMe={() => this.flipCellsAround(coord)}
+            value={coord}
+          />
+        );
       }
       tBoard.push(<tr key={y}>{row}</tr>);
     }
     // TODO
     return (
       <div>
-        <h1>Board</h1>
-        <table className="Board">
-          <tbody>
-            {tBoard}
-          </tbody>
-        </table>
+        {this.state.hasWon ? (
+          <div className="winner">
+            <span className="neon-orange">YOU</span>
+            <span className="neon-blue">WIN!</span>
+          </div>
+        ) : (
+          <div>
+            <div className="Board-title">
+              <div className="neon-orange">LIGHTS</div>
+              <div className="neon-blue">OUT</div>
+            </div>
+            <table className="Board">
+              <tbody>{tBoard}</tbody>
+            </table>
+          </div>
+        )}
       </div>
     );
   }
